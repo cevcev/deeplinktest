@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open in Fizy</title>
+
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0f172a;
+            color: white;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .box {
+            text-align: center;
+            padding: 32px;
+            max-width: 360px;
+        }
+        h1 {
+            font-size: 22px;
+            margin-bottom: 12px;
+        }
+        p {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 24px;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: none;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 12px;
+        }
+        .primary {
+            background: #6366f1;
+            color: white;
+        }
+        .secondary {
+            background: #e5e7eb;
+            color: #111827;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h1>Opening Fizy</h1>
+    <p>We are redirecting you to the app…</p>
+
+    <button class="primary" onclick="openApp()">Open Fizy</button>
+    <button class="secondary" onclick="goToStore()">Get the App</button>
+</div>
+
+<script>
+    const IOS_STORE = "https://apps.apple.com/app/id404239912";
+    const ANDROID_STORE = "https://play.google.com/store/apps/details?id=com.turkcell.gncplay";
+
+    const IOS_DEEPLINK =
+        "fizy://inappbrowser/https://fizy.com/kampanya/konser-bileti2/";
+
+    const ANDROID_DEEPLINK =
+        "intent://inappbrowser/https://fizy.com/kampanya/konser-bileti2/#Intent;" +
+        "scheme=fizy;" +
+        "package=com.turkcell.gncplay;" +
+        "end;";
+
+    function isIOS() {
+        return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    }
+
+    function isAndroid() {
+        return /Android/i.test(navigator.userAgent);
+    }
+
+    function openApp() {
+        const start = Date.now();
+        let opened = false;
+
+        const visibilityHandler = () => {
+            if (document.hidden) opened = true;
+        };
+
+        document.addEventListener("visibilitychange", visibilityHandler);
+
+        window.location.href = isAndroid()
+            ? ANDROID_DEEPLINK
+            : IOS_DEEPLINK;
+
+        setTimeout(() => {
+            document.removeEventListener("visibilitychange", visibilityHandler);
+
+            if (!opened && Date.now() - start < 3000) {
+                document.querySelector("h1").textContent = "Get the Fizy App";
+                document.querySelector("p").textContent =
+                    "Install the app to open this content.";
+
+            }
+        }, 2200);
+    }
+
+    function goToStore() {
+        window.location.href = isIOS()
+            ? IOS_STORE
+            : ANDROID_STORE;
+    }
+
+    // Auto attempt
+    window.addEventListener("load", () => {
+        setTimeout(openApp, 500);
+    });
+</script>
+
+</body>
+</html>

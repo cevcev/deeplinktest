@@ -56,7 +56,7 @@
     <h1>Opening Fizy</h1>
     <p>We are redirecting you to the app…</p>
 
-    <button class="primary" onclick="openApp()">Open Fizy</button>
+    <button id="openapp_id" class="primary" onclick="openApp()">Open Fizy</button>
     <button class="secondary" onclick="goToStore()">Get the App</button>
 </div>
 
@@ -99,6 +99,7 @@
                 document.querySelector("h1").textContent = "Get the Fizy App";
                 document.querySelector("p").textContent =
                     "Install the app to open this content.";
+                document.getElementById("openapp_id").remove();
 
             }
         }, 2200);
